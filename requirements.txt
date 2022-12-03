@@ -1,0 +1,5 @@
+bs4
+webdriver_manager
+selenium
+lxml
+twilio
