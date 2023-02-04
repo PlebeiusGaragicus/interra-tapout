@@ -3,6 +3,8 @@ import platform
 from time import sleep
 import logging
 
+import dotenv
+
 import bs4
 
 import selenium
@@ -12,15 +14,28 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-from config import *
+
+class Config:
+    UNIT = None
+    UNIT_PHONETIC = None
+    INTTERRA_USERNAME = None
+    INTTERRA_PASSWORD = None
+
+    TWILIO_SID = None
+    TWILIO_TOKEN = None
+    TWILIO_PHONENUMBER_TO = None
+    TWILIO_PHONENUMBER_FROM = None
+
+
+this_config = Config()
 
 
 def sendSMS(msg):
     from twilio.rest import Client
-    client = Client(TWILIO_SID, TWILIO_TOKEN)
+    client = Client(this_config.TWILIO_SID, this_config.TWILIO_TOKEN)
     message = client.messages.create(
-        to=TWILIO_PHONENUMBER_TO, 
-        from_=TWILIO_PHONENUMBER_FROM,
+        to=this_config.TWILIO_PHONENUMBER_TO, 
+        from_=this_config.TWILIO_PHONENUMBER_FROM,
         body=msg)
 
 
@@ -52,7 +67,7 @@ def speak(call, address, latlon):
     """
 
     logging.info(f"CALL: {call} at {address}")
-    os.popen(f"say {UNIT_PHONETIC} has a {call} at {phonetic_address(address)}")
+    os.popen(f"say {this_config.UNIT_PHONETIC} has a {call} at {phonetic_address(address)}")
     sendSMS(f"{call}\n{address}\nhttps://www.google.com/maps/place/{latlon}")
 
 
@@ -84,10 +99,10 @@ def open_page():
 
 def login(driver: webdriver.Chrome):
     username = driver.find_element(by=By.NAME, value="username")
-    username.send_keys(INTTERRA_USERNAME)
+    username.send_keys(this_config.INTTERRA_USERNAME)
 
     password = driver.find_element(by=By.NAME, value="password")
-    password.send_keys(INTTERRA_PASSWORD)
+    password.send_keys(this_config.INTTERRA_PASSWORD)
 
     driver.find_element(by=By.XPATH, value='//button').click()
 
@@ -138,12 +153,12 @@ def alert_loop(driver: webdriver.Chrome):
                 addr = units_addr.split('●')[2].strip()
                 addr = addr.split('[')[0] # this gets rid of any '[' and following text
 
-                if UNIT in units:
+                if this_config.UNIT in units:
                     if last_call != (call, addr):
-                        logging.info(f"NEW CALL!!!! {UNIT} - {call} - {addr}")
+                        logging.info(f"NEW CALL!!!! {this_config.UNIT} - {call} - {addr}")
 
                         for i in driver.find_elements(by=By.TAG_NAME, value='span'):
-                            if i.text.strip() == UNIT:
+                            if i.text.strip() == this_config.UNIT:
                                 try:
                                     i.click()
                                 except selenium.common.exceptions.ElementClickInterceptedException:
@@ -196,7 +211,6 @@ def alert_loop(driver: webdriver.Chrome):
 
 
 def main():
-    #log_format = "[%(levelname)s] - %(message)s"
     log_format="[%(levelname)s] (%(filename)s @ %(lineno)d) %(message)s"
     logginglevel = logging.INFO
     logging.basicConfig(
@@ -204,6 +218,7 @@ def main():
         format=log_format,
         handlers=[logging.StreamHandler(),
                   logging.FileHandler('debug.log', mode='w')])
+
 
     logging.info(f"STARTING...")
 
@@ -218,11 +233,24 @@ def main():
     try:
         alert_loop(driver)
     except KeyboardInterrupt:
-        print("GOOD BYE!!!!!!!!!!!!!!!!!!!!!")
+        print("GOOD BYE!!!!!!!!!!")
         driver.quit()
         exit(0)
 
 
 
+
 if __name__ == "__main__":
+    dotenv.load_dotenv()
+
+    this_config.UNIT = os.getenv("UNIT")
+    this_config.UNIT_PHONETIC = os.getenv("UNIT_PHONETIC")
+    this_config.INTTERRA_USERNAME = os.getenv("INTTERRA_USERNAME")
+    this_config.INTTERRA_PASSWORD = os.getenv("INTTERRA_PASSWORD")
+
+    this_config.TWILIO_SID = os.getenv("TWILIO_SID")
+    this_config.TWILIO_TOKEN = os.getenv("TWILIO_TOKEN")
+    this_config.TWILIO_PHONENUMBER_TO = os.getenv("TWILIO_PHONENUMBER_TO")
+    this_config.TWILIO_PHONENUMBER_FROM = os.getenv("TWILIO_PHONENUMBER_FROM")
+
     main()

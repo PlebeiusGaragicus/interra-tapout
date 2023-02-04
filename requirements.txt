@@ -3,3 +3,4 @@ webdriver_manager
 selenium
 lxml
 twilio
+python-dotenv
