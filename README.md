@@ -17,12 +17,12 @@ pip install -r requirements.txt
 chmod +x run
 ```
 
-# create config.py
+# create .env
 
 Run this multi-line command to create your config.py
 
 ```sh
-cat > config.py << EOF
+cat > .env << EOF
 UNIT = ""
 UNIT_PHONETIC = ""
 INTTERRA_USERNAME = ""
