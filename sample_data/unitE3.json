@@ -1,0 +1,83 @@
+we found E3
+{
+  id: 'E3',
+  unitId: 'E3',
+  geometry: { type: 'Point', coordinates: [
+            -13657647.1,
+            5705177.6
+        ]
+    },
+  agencyId: '3e50734d-06da-49b8-9af4-aa368a81f684',
+  agency: 'Portland Fire & Rescue',
+  unitName: 'E3',
+  shortName: 'E',
+  apparatusCategory: 'engine',
+  discipline: null,
+  statusCode: 'IQ',
+  statusDescription: 'AVAILABLE IN QUARTERS',
+  statusUpdateOn: '2023-04-10T05: 48: 59Z',
+  standardStatusCode: 'Station',
+  incidentId: null,
+  address: '1715 NW Johnson St.',
+  responsePriorityCode: '0',
+  responsePriorityDescription: null,
+  unitDescription: 'Engine-3',
+  currentStation: '3',
+  homeStation: '3',
+  crewNames: null,
+  direction: 323,
+  speed: 0.7,
+  gpsFixOn: '2023-04-10T06: 13: 20Z',
+  gpsFixQuality: null,
+  gpsFixDescription: 'Stale Coordinates',
+  displayOrder: 7,
+  metadata: {
+    tz: 'PST8PDT',
+    agency: 'PF&R',
+    staffing: 4,
+    customData: {
+      activeMdt: 'Y',
+      jurisdiction2: null,
+      jurisdiction3: 'RP',
+      tacticalChannel: null,
+      unitCapabilities: 'A B CHE F G I M O P U Z'
+        },
+    apparatusType: '11',
+    drawdownGroup: 'Engines',
+    localTimestamps: {
+      gpsFixOn: '04/09/2023 23: 13: 20 PDT',
+      statusUpdateOn: '04/09/2023 22: 48: 59 PDT'
+        },
+    apparatusCategory: 'engine',
+    stationJurisdiction1: 'Battalion 1',
+    stationJurisdiction2: 'NW Pearl District',
+    stationJurisdiction3: null,
+    stationJurisdiction4: 'PF&R'
+    },
+  flags: { isFilter: true, isGpsFixValid: null, showDrivetime: true
+    },
+  drawdownGroup: 'Engines',
+  customData: {
+    activeMdt: 'Y',
+    jurisdiction2: null,
+    jurisdiction3: 'RP',
+    tacticalChannel: null,
+    unitCapabilities: 'A B CHE F G I M O P U Z'
+    },
+  drawdownStatus: 'Unassigned',
+  latitude: 45.5289233,
+  longitude: -122.6887317,
+  crewCount: 4,
+  createdOn: '2023-04-10T06: 13: 21Z',
+  type: 'unit',
+  displayCategory: 'apparatusCategories',
+  symbol: 'engine',
+  Battalion: null,
+  District: null,
+  Jurisdiction: 'RP',
+  Department: null,
+  stationJurisdiction1: 'Battalion 1',
+  stationJurisdiction2: 'NW Pearl District',
+  stationJurisdiction3: null,
+  stationJurisdiction4: 'PF&R'
+}
