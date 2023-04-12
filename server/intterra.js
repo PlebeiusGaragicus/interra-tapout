@@ -166,8 +166,34 @@ async function handleWebSocketFrameReceived({ requestId, timestamp, response }) 
 
 const unitStatusMap = new Map();
 
-async function processUnitUpdates(updates) {
+// async function processUnitUpdates(updates) {
 
+//     const tappedOutUnits = new Set();
+//     for (const update of updates) {
+//         const { unit, incidentId, lat, lon } = update;
+
+//         // Check if the unit already exists in the unitStatusMap and if the incidentID has changed
+//         if (unitStatusMap.has(unit) && unitStatusMap.get(unit).incidentId !== incidentId) {
+//             if (incidentId === null)
+//                 console.log(`${unit} cleared`);
+//             else {
+//                 console.log(`TAPOUT: ${unit} on ${incidentId}`);
+//                 tappedOutUnits.add(unit);
+//             }
+//         }
+
+//         unitStatusMap.set(unit, { incidentId, lat, lon });
+//     }
+
+//     let incidents = null;
+//     if (tappedOutUnits.size > 0) {
+//         incidents = await getIncidentData();
+//         await alertUsersForTappedOutUnits(tappedOutUnits, incidents);
+//     }
+// }
+
+
+async function processUnitUpdates(updates) {
     const tappedOutUnits = new Set();
     for (const update of updates) {
         const { unit, incidentId, lat, lon } = update;
@@ -185,12 +211,21 @@ async function processUnitUpdates(updates) {
         unitStatusMap.set(unit, { incidentId, lat, lon });
     }
 
+    // Retrieve all users from the database
+    const users = await getAllUsers();
+
+    // Filter the tappedOutUnits to only include units with registered users
+    const tappedOutUnitsWithUsers = new Set(
+        [...tappedOutUnits].filter((unit) => users.some((user) => user.unit === unit))
+    );
+
     let incidents = null;
-    if (tappedOutUnits.size > 0) {
+    if (tappedOutUnitsWithUsers.size > 0) {
         incidents = await getIncidentData();
-        await alertUsersForTappedOutUnits(tappedOutUnits, incidents);
+        await alertUsersForTappedOutUnits(tappedOutUnitsWithUsers, incidents);
     }
 }
+
 
 
 

@@ -79,23 +79,46 @@ export async function getUsersWithUnit() {
 
 
 
+// export async function addUser(user_chat_id, unit) {
+//     try {
+//         const collection = db.collection('users');
+//         const newUser = {
+//             user_chat_id: user_chat_id,
+//             unit: unit,
+//         };
+
+//         const result = await collection.insertOne(newUser);
+
+//         if (result.insertedCount !== 1) {
+// BUG!!!! I added myself but it says it failed to insert the new user...
+//             console.error('Failed to insert the new user');
+//             return null;
+//         }
+
+//         return newUser;
+
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
+
 export async function addUser(user_chat_id, unit) {
     try {
         const collection = db.collection('users');
         const newUser = {
             user_chat_id: user_chat_id,
             unit: unit,
-            call: null
         };
 
         const result = await collection.insertOne(newUser);
 
-        if (result.insertedCount !== 1) {
+        if (result.acknowledged && result.insertedId) {
+            console.log('New user added successfully');
+            return newUser;
+        } else {
             console.error('Failed to insert the new user');
             return null;
         }
-
-        return newUser;
 
     } catch (error) {
         console.error(error);
@@ -171,142 +194,3 @@ export async function getAllUsers() {
         console.error(error);
     }
 }
-
-
-
-
-
-
-
-// export async function setPriceCeiling(ceiling) {
-//     console.log("setting priceCeiling set: ", ceiling);
-//     try {
-//         const collection = db.collection("alerts");
-//         await collection.updateOne({ name: "priceCeiling" }, {
-//             $set: { value: ceiling }
-//         }, { upsert: true });
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
-
-
-
-// export async function getPriceCeiling() {
-//     try {
-//         const collection = db.collection("alerts");
-
-//         const alert = await collection.findOne({ name: "priceCeiling" });
-//         // console.log("alert: ", alert);
-
-//         if (!alert) {
-//             return null;
-//         }
-
-//         return alert.value;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
-
-// export async function setPriceFloor(floor) {
-//     console.log("setting priceFloor set: ", floor);
-//     try {
-//         const collection = db.collection("alerts");
-//         await collection.updateOne({ name: "priceFloor" }, {
-//             $set: { value: floor }
-//         }, { upsert: true });
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
-
-
-// export async function getPriceFloor() {
-//     try {
-//         const collection = db.collection("alerts");
-
-//         const alert = await collection.findOne({ name: "priceFloor" });
-//         // console.log("alert: ", alert);
-
-//         if (!alert) {
-//             return null;
-//         }
-
-//         return alert.value;
-
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const devices = [
-//     { deviceId: "device1", ipAddress: "192.168.1.100", status: "active", miningCapacity: 10 },
-//     { deviceId: "device2", ipAddress: "192.168.1.101", status: "active", miningCapacity: 20 },
-//     { deviceId: "device3", ipAddress: "192.168.1.102", status: "inactive", miningCapacity: 30 }
-// ];
-
-// async function insertDevices() {
-//     try {
-//         await client.connect();
-//         const db = client.db("test");
-//         const collection = db.collection("devices");
-
-//         // Insert multiple documents
-//         await collection.insertMany(devices);
-//         console.log("Devices inserted");
-//     } catch (error) {
-//         console.error(error);
-//     } finally {
-//         await client.close();
-//     }
-// }
-
-
-
-// async function updateDeviceStatus(deviceId, status) {
-//     try {
-//         await client.connect();
-//         const db = client.db("test");
-//         const collection = db.collection("devices");
-
-//         // Update a single document
-//         await collection.updateOne({ deviceId: deviceId }, { $set: { status: status } });
-//         console.log("Device status updated");
-//     } catch (error) {
-//         console.error(error);
-//     } finally {
-//         await client.close();
-//     }
-// }
-
-// updateDeviceStatus("device1", "inactive");
-
-
-// async function getDevices() {
-//     try {
-//         await client.connect();
-//         const db = client.db("test");
-//         const collection = db.collection("devices");
-//         // Find all documents in the collection
-//         const devices = await collection.find({}).toArray();
-//         console.log(devices);
-//     } catch (error) {
-//         console.error(error);
-//     } finally {
-//         await client.close();
-//     }
-// }

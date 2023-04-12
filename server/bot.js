@@ -82,10 +82,6 @@ async function handleText(ctx) {
 
 
 
-
-
-
-
 export async function setupBot(bot) {
     bot.command('start', handleStartCommand);
 
