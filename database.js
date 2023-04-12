@@ -62,10 +62,10 @@ export async function getValue(name) {
 
 
 
-export async function getAuthenticatedUsersWithUnit() {
+export async function getUsersWithUnit() {
     try {
-        const collection = db.collection(config.DB_COLLECTION_NAME);
-        const users = await collection.find({ authenticated: true, unit: { $exists: true, $ne: '' } }).toArray();
+        const collection = db.collection('users');
+        const users = await collection.find({ unit: { $exists: true, $ne: '' } }).toArray();
 
         if (!users || users.length === 0)
             return null;
@@ -77,6 +77,100 @@ export async function getAuthenticatedUsersWithUnit() {
     }
 }
 
+
+
+export async function addUser(user_chat_id, unit) {
+    try {
+        const collection = db.collection('users');
+        const newUser = {
+            user_chat_id: user_chat_id,
+            unit: unit,
+            call: null
+        };
+
+        const result = await collection.insertOne(newUser);
+
+        if (result.insertedCount !== 1) {
+            console.error('Failed to insert the new user');
+            return null;
+        }
+
+        return newUser;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+export async function userExists(telegram_chat_id) {
+    try {
+        const collection = db.collection('users');
+        const user = await collection.findOne({ user_chat_id: telegram_chat_id });
+
+        return !!user;
+
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+
+
+export async function getUserUnit(telegram_chat_id) {
+    try {
+        const collection = db.collection('users');
+        const user = await collection.findOne({ user_chat_id: telegram_chat_id });
+
+        if (!user)
+            return null;
+
+        return user.unit;
+
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+
+export async function updateUserUnit(user_chat_id, unit) {
+    try {
+        const collection = db.collection('users');
+        const result = await collection.updateOne(
+            { user_chat_id: user_chat_id },
+            { $set: { unit: unit } }
+        );
+
+        if (result.modifiedCount !== 1) {
+            console.error('Failed to update the user unit');
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+
+export async function getAllUsers() {
+    try {
+        const collection = db.collection('users');
+        const users = await collection.find({}).toArray();
+
+        if (!users || users.length === 0)
+            return null;
+
+        return users;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 
 

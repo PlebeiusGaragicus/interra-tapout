@@ -62,7 +62,7 @@ export async function runIntterra() {
     //     console.error("Intterra unit not set in database");
     //     return;
     // }
-    const users = await getAuthenticatedUsersWithUnit();
+    // const users = await getAuthenticatedUsersWithUnit();
 
     console.log("Interra is watching unit: ", unit);
 

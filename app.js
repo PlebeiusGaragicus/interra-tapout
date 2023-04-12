@@ -79,4 +79,4 @@ await connectToMongoDB();
 
 initBot();
 
-runIntterra();
+// runIntterra();
