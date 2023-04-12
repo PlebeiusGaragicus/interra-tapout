@@ -80,7 +80,6 @@ export async function runIntterra() {
         return;
     }
 
-    // browser = await puppeteer.launch({ headless: config.debug ? false : true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
     browser = await puppeteer.launch({ headless: config.debug ? false : true });
     const page = await browser.newPage();
 
